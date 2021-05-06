@@ -1,0 +1,4151 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>(Spyder House) - footlox</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+
+    <style>
+        /* General */
+
+@font-face {
+    font-family: Whitney;
+    src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-300.woff);
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: Whitney;
+    src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-400.woff);
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: Whitney;
+    src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-500.woff);
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: Whitney;
+    src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-600.woff);
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: Whitney;
+    src: url(https://cdn.jsdelivr.net/gh/Tyrrrz/DiscordFonts@master/whitney-700.woff);
+    font-weight: 700;
+}
+
+body {
+    font-family: "Whitney", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+img {
+    object-fit: contain;
+}
+
+.markdown {
+    max-width: 100%;
+    line-height: 1.3;
+    overflow-wrap: break-word;
+}
+
+.preserve-whitespace {
+    white-space: pre-wrap;
+}
+
+.spoiler {
+    /* width: fit-content; */
+    display: inline-block;
+    /* This is more consistent across browsers, the old attribute worked well under Chrome but not FireFox. */
+}
+
+.spoiler--hidden {
+    cursor: pointer;
+}
+
+.spoiler-text {
+    border-radius: 3px;
+}
+
+.spoiler--hidden .spoiler-text {
+    color: rgba(0, 0, 0, 0);
+}
+
+.spoiler--hidden .spoiler-text::selection {
+    color: rgba(0, 0, 0, 0);
+}
+
+.spoiler-image {
+    position: relative;
+    overflow: hidden;
+    border-radius: 3px;
+}
+
+.spoiler--hidden .spoiler-image {
+    box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.spoiler--hidden .spoiler-image * {
+    filter: blur(44px);
+}
+
+.spoiler--hidden .spoiler-image:after {
+    content: "SPOILER";
+    color: #dcddde;
+    background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 600;
+    padding: 100%;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+    font-size: 0.9em;
+}
+
+.spoiler--hidden:hover .spoiler-image:after {
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.quote {
+    margin: 0.1em 0;
+    padding-left: 0.6em;
+    border-left: 4px solid;
+    border-radius: 3px;
+}
+
+.pre {
+    font-family: "Consolas", "Courier New", Courier, monospace;
+}
+
+.pre--multiline {
+    margin-top: 0.25em;
+    padding: 0.5em;
+    border: 2px solid;
+    border-radius: 5px;
+}
+
+.pre--inline {
+    padding: 2px;
+    border-radius: 3px;
+    font-size: 0.85em;
+}
+
+.mention {
+    border-radius: 3px;
+    padding: 0 2px;
+    color: #7289da;
+    background: rgba(114, 137, 218, .1);
+    font-weight: 500;
+}
+
+.emoji {
+    width: 1.25em;
+    height: 1.25em;
+    margin: 0 0.06em;
+    vertical-align: -0.4em;
+}
+
+.emoji--small {
+    width: 1em;
+    height: 1em;
+}
+
+.emoji--large {
+    width: 2.8em;
+    height: 2.8em;
+}
+
+/* Preamble */
+
+.preamble {
+    display: grid;
+    margin: 0 0.3em 0.6em 0.3em;
+    max-width: 100%;
+    grid-template-columns: auto 1fr;
+}
+
+.preamble__guild-icon-container {
+    grid-column: 1;
+}
+
+.preamble__guild-icon {
+    max-width: 88px;
+    max-height: 88px;
+}
+
+.preamble__entries-container {
+    grid-column: 2;
+    margin-left: 0.6em;
+}
+
+.preamble__entry {
+    font-size: 1.4em;
+}
+
+.preamble__entry--small {
+    font-size: 1em;
+}
+
+/* Chatlog */
+
+.chatlog {
+    max-width: 100%;
+}
+
+.chatlog__message-group {
+    display: grid;
+    margin: 0 0.6em;
+    padding: 0.9em 0;
+    border-top: 1px solid;
+    grid-template-columns: auto 1fr;
+}
+
+.chatlog__reference-symbol {
+    grid-column: 1;
+    border-style: solid;
+    border-width: 2px 0 0 2px;
+    border-radius: 8px 0 0 0;
+    margin-left: 16px;
+    margin-top: 8px;
+}
+
+.chatlog__reference {
+    display: flex;
+    grid-column: 2;
+    margin-left: 1.2em;
+    margin-bottom: 0.25em;
+    font-size: 0.875em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    align-items: center;
+}
+
+.chatlog__reference-avatar {
+    border-radius: 50%;
+    height: 16px;
+    width: 16px;
+    margin-right: 0.25em;
+}
+
+.chatlog__reference-name {
+    margin-right: 0.25em;
+    font-weight: 600;
+}
+
+.chatlog__reference-link {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chatlog__reference-link:hover {
+    text-decoration: none;
+}
+
+.chatlog__reference-content > * {
+    display: inline;
+}
+
+.chatlog__reference-edited-timestamp {
+    margin-left: 0.25em;
+    font-size: 0.8em;
+}
+
+.chatlog__author-avatar-container {
+    grid-column: 1;
+    width: 40px;
+    height: 40px;
+}
+
+.chatlog__author-avatar {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+}
+
+.chatlog__messages {
+    grid-column: 2;
+    margin-left: 1.2em;
+    min-width: 50%;
+}
+
+.chatlog__author-name {
+    font-weight: 500;
+}
+
+.chatlog__timestamp {
+    margin-left: 0.3em;
+    font-size: 0.75em;
+}
+
+.chatlog__message {
+    padding: 0.1em 0.3em;
+    margin: 0 -0.3em;
+    background-color: transparent;
+    transition: background-color 1s ease;
+}
+
+.chatlog__content {
+    font-size: 0.95em;
+    word-wrap: break-word;
+}
+
+.chatlog__edited-timestamp {
+    margin-left: 0.15em;
+    font-size: 0.8em;
+}
+
+.chatlog__attachment {
+    margin-top: 0.3em;
+}
+
+.chatlog__attachment-thumbnail {
+    vertical-align: top;
+    max-width: 45vw;
+    max-height: 500px;
+    border-radius: 3px;
+}
+
+.chatlog__attachment-container {
+    height: 40px;
+    width: 100%;
+    max-width: 520px;
+    padding: 10px;
+    border: 1px solid;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.chatlog__attachment-icon {
+    float: left;
+    height: 100%;
+    margin-right: 10px;
+}
+
+.chatlog__attachment-icon > .a {
+    fill: #f4f5fb;
+    d: path("M50,935a25,25,0,0,1-25-25V50A25,25,0,0,1,50,25H519.6L695,201.32V910a25,25,0,0,1-25,25Z");
+}
+
+.chatlog__attachment-icon > .b {
+    fill: #7789c4;
+    d: path("M509.21,50,670,211.63V910H50V50H509.21M530,0H50A50,50,0,0,0,0,50V910a50,50,0,0,0,50,50H670a50,50,0,0,0,50-50h0V191Z");
+}
+
+.chatlog__attachment-icon > .c {
+    fill: #f4f5fb;
+    d: path("M530,215a25,25,0,0,1-25-25V50a25,25,0,0,1,16.23-23.41L693.41,198.77A25,25,0,0,1,670,215Z");
+}
+
+.chatlog__attachment-icon > .d {
+    fill: #7789c4;
+    d: path("M530,70.71,649.29,190H530V70.71M530,0a50,50,0,0,0-50,50V190a50,50,0,0,0,50,50H670a50,50,0,0,0,50-50Z");
+}
+
+.chatlog__attachment-filesize {
+    color: #72767d;
+    font-size: 12px;
+}
+
+.chatlog__attachment-filename {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.chatlog__embed {
+    display: flex;
+    margin-top: 0.3em;
+    max-width: 520px;
+}
+
+.chatlog__embed-color-pill {
+    flex-shrink: 0;
+    width: 0.25em;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.chatlog__embed-content-container {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em 0.6em;
+    border: 1px solid;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.chatlog__embed-content {
+    display: flex;
+    width: 100%;
+}
+
+.chatlog__embed-text {
+    flex: 1;
+}
+
+.chatlog__embed-author {
+    display: flex;
+    margin-bottom: 0.3em;
+    align-items: center;
+}
+
+.chatlog__embed-author-icon {
+    margin-right: 0.5em;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+}
+
+.chatlog__embed-author-name {
+    font-size: 0.875em;
+    font-weight: 600;
+}
+
+.chatlog__embed-title {
+    margin-bottom: 0.2em;
+    font-size: 0.875em;
+    font-weight: 600;
+}
+
+.chatlog__embed-description {
+    font-weight: 500;
+    font-size: 0.85em;
+}
+
+.chatlog__embed-fields {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.chatlog__embed-field {
+    flex: 0;
+    min-width: 100%;
+    max-width: 506px;
+    padding-top: 0.6em;
+    font-size: 0.875em;
+}
+
+.chatlog__embed-field--inline {
+    flex: 1;
+    flex-basis: auto;
+    min-width: 150px;
+}
+
+.chatlog__embed-field-name {
+    margin-bottom: 0.2em;
+    font-weight: 600;
+}
+
+.chatlog__embed-field-value {
+    font-weight: 500;
+}
+
+.chatlog__embed-thumbnail {
+    flex: 0;
+    margin-left: 1.2em;
+    max-width: 80px;
+    max-height: 80px;
+    border-radius: 3px;
+}
+
+.chatlog__embed-image-container {
+    margin-top: 0.6em;
+}
+
+.chatlog__embed-image {
+    max-width: 500px;
+    max-height: 400px;
+    border-radius: 3px;
+}
+
+.chatlog__embed-footer {
+    margin-top: 0.6em;
+}
+
+.chatlog__embed-footer-icon {
+    margin-right: 0.2em;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.chatlog__embed-footer-text {
+    font-size: 0.75em;
+    font-weight: 500;
+}
+
+.chatlog__reactions {
+    display: flex;
+}
+
+.chatlog__reaction {
+    display: flex;
+    align-items: center;
+    margin: 0.35em 0.1em 0.1em 0.1em;
+    padding: 0.2em 0.35em;
+    border-radius: 3px;
+}
+
+.chatlog__reaction-count {
+    min-width: 9px;
+    margin-left: 0.35em;
+    font-size: 0.875em;
+}
+
+.chatlog__bot-tag {
+    position: relative;
+    top: -.2em;
+    margin-left: 0.3em;
+    padding: 0.05em 0.3em;
+    border-radius: 3px;
+    vertical-align: middle;
+    line-height: 1.3;
+    background: #7289da;
+    color: #ffffff;
+    font-size: 0.625em;
+    font-weight: 500;
+}
+
+/* Postamble */
+
+.postamble {
+    margin: 1.4em 0.3em 0.6em 0.3em;
+    padding: 1em;
+    border-top: 1px solid;
+}
+    </style>
+    <style>
+        /* General */
+
+body {
+    background-color: #36393e;
+    color: #dcddde;
+}
+
+a {
+    color: #0096cf;
+}
+
+.spoiler-text {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.spoiler--hidden .spoiler-text {
+    background-color: #202225;
+}
+
+.spoiler--hidden:hover .spoiler-text {
+    background-color: rgba(32, 34, 37, 0.8);
+}
+
+.quote {
+    border-color: #4f545c;
+}
+
+.pre {
+    background-color: #2f3136 !important;
+}
+
+.pre--multiline {
+    border-color: #282b30 !important;
+    color: #b9bbbe !important;
+}
+
+/* === Preamble === */
+
+.preamble__entry {
+    color: #ffffff;
+}
+
+/* Chatlog */
+
+.chatlog__message-group {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.chatlog__reference-symbol {
+    border-color: #4f545c;
+}
+
+.chatlog__reference {
+    color: #b5b6b8;
+}
+
+.chatlog__reference-link {
+    color: #b5b6b8;
+}
+
+.chatlog__reference-link:hover {
+    color: #ffffff;
+}
+
+.chatlog__reference-edited-timestamp {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.chatlog__author-name {
+    color: #ffffff;
+}
+
+.chatlog__timestamp {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.chatlog__message--highlighted {
+    background-color: rgba(114, 137, 218, 0.2) !important;
+}
+
+.chatlog__message--pinned {
+    background-color: rgba(249, 168, 37, 0.05);
+}
+
+.chatlog__attachment-container {
+    background-color: #2f3136;
+    border-color: #292b2f;
+}
+
+.chatlog__edited-timestamp {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.chatlog__embed-color-pill--default {
+    background-color: rgba(79, 84, 92, 1);
+}
+
+.chatlog__embed-content-container {
+    background-color: rgba(46, 48, 54, 0.3);
+    border-color: rgba(46, 48, 54, 0.6);
+}
+
+.chatlog__embed-author-name {
+    color: #ffffff;
+}
+
+.chatlog__embed-author-name-link {
+    color: #ffffff;
+}
+
+.chatlog__embed-title {
+    color: #ffffff;
+}
+
+.chatlog__embed-description {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.chatlog__embed-field-name {
+    color: #ffffff;
+}
+
+.chatlog__embed-field-value {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.chatlog__embed-footer {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.chatlog__reaction {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.chatlog__reaction-count {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* Postamble */
+
+.postamble {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.postamble__entry {
+    color: #ffffff;
+}
+    </style>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/solarized-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.pre--multiline').forEach(block => hljs.highlightBlock(block));
+        });
+    </script>
+
+    <script>
+        function scrollToMessage(event, id) {
+            var element = document.getElementById('message-' + id);
+
+            if (element) {
+                event.preventDefault();
+
+                element.classList.add('chatlog__message--highlighted');
+
+                window.scrollTo({
+                    top: element.getBoundingClientRect().top - document.body.getBoundingClientRect().top - (window.innerHeight / 2),
+                    behavior: 'smooth'
+                });
+
+                window.setTimeout(function() {
+                    element.classList.remove('chatlog__message--highlighted');
+                }, 2000);
+            }
+        }
+
+        function showSpoiler(event, element) {
+            if (element && element.classList.contains('spoiler--hidden')) {
+                event.preventDefault();
+                element.classList.remove('spoiler--hidden');
+            }
+        }
+    </script>
+</head>
+<body>
+
+<div class="preamble">
+    <div class="preamble__guild-icon-container">
+        <img class="preamble__guild-icon" src="https://cdn.discordapp.com/icons/695434148042768494/47152973ed8c7730ef8cf13609b5cc58.png" alt="Guild icon">
+    </div>
+    <div class="preamble__entries-container">
+        <div class="preamble__entry">(Spyder House)</div>
+        <div class="preamble__entry">(Spyder) Replay Lockers / footlox</div>
+
+
+    </div>
+</div>
+
+<div class="chatlog">
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">08-Aug-20 01:08 PM</span>
+
+            <div class="chatlog__message " data-message-id="741734544364798013" id="message-741734544364798013">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://a.gyazo.com/efc21040fc688ec7acae9fba5a673c0c">https://a.gyazo.com/efc21040fc688ec7acae9fba5a673c0c</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://a.gyazo.com/efc21040fc688ec7acae9fba5a673c0c">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/efc21040fc688ec7acae9fba5a673c0c-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/efc21040fc688ec7acae9fba5a673c0c-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="741734705510088746" id="message-741734705510088746">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://u.gyazo.com/524dcde8ae0ced30d5d43fbc222a2672">https://u.gyazo.com/524dcde8ae0ced30d5d43fbc222a2672</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://u.gyazo.com/524dcde8ae0ced30d5d43fbc222a2672">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/524dcde8ae0ced30d5d43fbc222a2672-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/524dcde8ae0ced30d5d43fbc222a2672-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="741735097014812743" id="message-741735097014812743">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://y.gyazo.com/cdc2bf5fdb6ed610b9e40cd8780aaacd">https://y.gyazo.com/cdc2bf5fdb6ed610b9e40cd8780aaacd</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://y.gyazo.com/cdc2bf5fdb6ed610b9e40cd8780aaacd">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/cdc2bf5fdb6ed610b9e40cd8780aaacd-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/cdc2bf5fdb6ed610b9e40cd8780aaacd-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="741735294046306336" id="message-741735294046306336">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://w.gyazo.com/92b7acb7641aa5e0b956cae62904960f">https://w.gyazo.com/92b7acb7641aa5e0b956cae62904960f</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://w.gyazo.com/92b7acb7641aa5e0b956cae62904960f">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/92b7acb7641aa5e0b956cae62904960f-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/92b7acb7641aa5e0b956cae62904960f-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="741735399700824174" id="message-741735399700824174">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://l.gyazo.com/96af4de82d8317171798cbb025464443">https://l.gyazo.com/96af4de82d8317171798cbb025464443</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://l.gyazo.com/96af4de82d8317171798cbb025464443">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/96af4de82d8317171798cbb025464443-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/96af4de82d8317171798cbb025464443-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="741735520882655442" id="message-741735520882655442">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace">Double feint, cross, inside leg kick, shoot into a blast double.
+<a href="https://x.gyazo.com/b0d1198a9e36b4472a6d7b38a8e377b5">https://x.gyazo.com/b0d1198a9e36b4472a6d7b38a8e377b5</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://x.gyazo.com/b0d1198a9e36b4472a6d7b38a8e377b5">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/b0d1198a9e36b4472a6d7b38a8e377b5-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/b0d1198a9e36b4472a6d7b38a8e377b5-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="741735582304305222" id="message-741735582304305222">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://i.gyazo.com/25a07ec907ded4e17b9a3b3fb5bed0ed">https://i.gyazo.com/25a07ec907ded4e17b9a3b3fb5bed0ed</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://i.gyazo.com/25a07ec907ded4e17b9a3b3fb5bed0ed">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/25a07ec907ded4e17b9a3b3fb5bed0ed-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/25a07ec907ded4e17b9a3b3fb5bed0ed-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="741736564543062036" id="message-741736564543062036">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://q.gyazo.com/823e1b070b565c48736e39373478a0d8">https://q.gyazo.com/823e1b070b565c48736e39373478a0d8</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://q.gyazo.com/823e1b070b565c48736e39373478a0d8">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/823e1b070b565c48736e39373478a0d8-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/823e1b070b565c48736e39373478a0d8-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="741736639470108733" id="message-741736639470108733">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://u.gyazo.com/cbfb016724176a29bb12a2bc9ed967ba">https://u.gyazo.com/cbfb016724176a29bb12a2bc9ed967ba</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://u.gyazo.com/cbfb016724176a29bb12a2bc9ed967ba">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/cbfb016724176a29bb12a2bc9ed967ba-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/cbfb016724176a29bb12a2bc9ed967ba-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="741736747586814013" id="message-741736747586814013">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://v.gyazo.com/11fe453683b560717f85fda94c57130b">https://v.gyazo.com/11fe453683b560717f85fda94c57130b</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://v.gyazo.com/11fe453683b560717f85fda94c57130b">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/11fe453683b560717f85fda94c57130b-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/11fe453683b560717f85fda94c57130b-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="741736863017992242" id="message-741736863017992242">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://o.gyazo.com/de2ba98ac4ee6949e5e6a3fd3a9d4c15">https://o.gyazo.com/de2ba98ac4ee6949e5e6a3fd3a9d4c15</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://o.gyazo.com/de2ba98ac4ee6949e5e6a3fd3a9d4c15">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/de2ba98ac4ee6949e5e6a3fd3a9d4c15-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/de2ba98ac4ee6949e5e6a3fd3a9d4c15-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="741737004634472521" id="message-741737004634472521">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://p.gyazo.com/0bb4b816871850fa71ea50ee1b977f6e">https://p.gyazo.com/0bb4b816871850fa71ea50ee1b977f6e</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://p.gyazo.com/0bb4b816871850fa71ea50ee1b977f6e">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/0bb4b816871850fa71ea50ee1b977f6e-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/0bb4b816871850fa71ea50ee1b977f6e-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="741737113401163846" id="message-741737113401163846">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://h.gyazo.com/893ed90b4f1edaf21976a3c57dd33ae1">https://h.gyazo.com/893ed90b4f1edaf21976a3c57dd33ae1</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://h.gyazo.com/893ed90b4f1edaf21976a3c57dd33ae1">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/893ed90b4f1edaf21976a3c57dd33ae1-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/893ed90b4f1edaf21976a3c57dd33ae1-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="741737302757474399" id="message-741737302757474399">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://x.gyazo.com/77b719c91d943a769275f997f1e88d25">https://x.gyazo.com/77b719c91d943a769275f997f1e88d25</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://x.gyazo.com/77b719c91d943a769275f997f1e88d25">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/77b719c91d943a769275f997f1e88d25-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/77b719c91d943a769275f997f1e88d25-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="741737440972112003" id="message-741737440972112003">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://gyazo.com/f4e04ab6c9100624beab053b3771502d">https://gyazo.com/f4e04ab6c9100624beab053b3771502d</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://gyazo.com/f4e04ab6c9100624beab053b3771502d">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/f4e04ab6c9100624beab053b3771502d-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/f4e04ab6c9100624beab053b3771502d-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">25-Aug-20 05:38 AM</span>
+
+            <div class="chatlog__message " data-message-id="747781907223412787" id="message-747781907223412787">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://y.gyazo.com/b6ba2e427965135cb87a95eb3a9cacee">https://y.gyazo.com/b6ba2e427965135cb87a95eb3a9cacee</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://y.gyazo.com/b6ba2e427965135cb87a95eb3a9cacee">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/b6ba2e427965135cb87a95eb3a9cacee-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/b6ba2e427965135cb87a95eb3a9cacee-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">25-Aug-20 11:18 AM</span>
+
+            <div class="chatlog__message " data-message-id="747867591162462228" id="message-747867591162462228">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://s.gyazo.com/f731a6b4c523994e9a1867c87095ab50">https://s.gyazo.com/f731a6b4c523994e9a1867c87095ab50</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="25-Aug-20 11:18 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://s.gyazo.com/f731a6b4c523994e9a1867c87095ab50">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/f731a6b4c523994e9a1867c87095ab50-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/f731a6b4c523994e9a1867c87095ab50-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">26-Aug-20 05:51 AM</span>
+
+            <div class="chatlog__message " data-message-id="748147723521228800" id="message-748147723521228800">
+
+                    <div class="chatlog__attachment">
+                        <div class="" onclick="">
+                            <div class="">
+                                    <div class="chatlog__attachment-container">
+                                        <svg class="chatlog__attachment-icon" viewBox="0 0 720 960">
+                                            <path class="a"/>
+                                            <path class="b"/>
+                                            <path class="c"/>
+                                            <path class="d"/>
+                                        </svg>
+                                        <div class="chatlog__attachment-filename">
+                                            <a href="https://cdn.discordapp.com/attachments/741732506927235083/748147722955259924/front_head_triangle_demo.rpl">
+                                                front_head_triangle_demo.rpl
+                                            </a>
+                                        </div>
+                                        <div class="chatlog__attachment-filesize">
+                                            313.43 KB
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">29-Aug-20 09:00 PM</span>
+
+            <div class="chatlog__message " data-message-id="749463420952248422" id="message-749463420952248422">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://l.gyazo.com/16100a97dd419f0d2c3bd3912b71ea70">https://l.gyazo.com/16100a97dd419f0d2c3bd3912b71ea70</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="29-Aug-20 09:00 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://l.gyazo.com/16100a97dd419f0d2c3bd3912b71ea70">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/16100a97dd419f0d2c3bd3912b71ea70-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/16100a97dd419f0d2c3bd3912b71ea70-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="749464456488026113" id="message-749464456488026113">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://b.gyazo.com/e35476c4f0c29a4525658738d153731e">https://b.gyazo.com/e35476c4f0c29a4525658738d153731e</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="29-Aug-20 09:04 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://b.gyazo.com/e35476c4f0c29a4525658738d153731e">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/e35476c4f0c29a4525658738d153731e-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/e35476c4f0c29a4525658738d153731e-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="749466209610760263" id="message-749466209610760263">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://x.gyazo.com/d3651a7b314e92d8919a9807cbc096b3">https://x.gyazo.com/d3651a7b314e92d8919a9807cbc096b3</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="29-Aug-20 09:11 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://x.gyazo.com/d3651a7b314e92d8919a9807cbc096b3">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/d3651a7b314e92d8919a9807cbc096b3-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/d3651a7b314e92d8919a9807cbc096b3-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">29-Aug-20 11:03 PM</span>
+
+            <div class="chatlog__message " data-message-id="749494383136473150" id="message-749494383136473150">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://n.gyazo.com/ae5e74aa9c688f00bfe72a17a1527cdb">https://n.gyazo.com/ae5e74aa9c688f00bfe72a17a1527cdb</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="29-Aug-20 11:03 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://n.gyazo.com/ae5e74aa9c688f00bfe72a17a1527cdb">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/ae5e74aa9c688f00bfe72a17a1527cdb-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/ae5e74aa9c688f00bfe72a17a1527cdb-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="749495350435512362" id="message-749495350435512362">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://k.gyazo.com/0a1be906f910f34f7aa3935bd14b9e55">https://k.gyazo.com/0a1be906f910f34f7aa3935bd14b9e55</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="29-Aug-20 11:08 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://k.gyazo.com/0a1be906f910f34f7aa3935bd14b9e55">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/0a1be906f910f34f7aa3935bd14b9e55-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/0a1be906f910f34f7aa3935bd14b9e55-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">01-Sep-20 05:20 AM</span>
+
+            <div class="chatlog__message " data-message-id="750314223170748426" id="message-750314223170748426">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://c.gyazo.com/9cb59e70dc05f61659a600878364be90">https://c.gyazo.com/9cb59e70dc05f61659a600878364be90</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="01-Sep-20 05:21 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://c.gyazo.com/9cb59e70dc05f61659a600878364be90">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/9cb59e70dc05f61659a600878364be90-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/9cb59e70dc05f61659a600878364be90-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">01-Sep-20 05:30 AM</span>
+
+            <div class="chatlog__message " data-message-id="750316676121231370" id="message-750316676121231370">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://e.gyazo.com/3af7803ef07f1eb9cdb19d904ed8a4ca">https://e.gyazo.com/3af7803ef07f1eb9cdb19d904ed8a4ca</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="01-Sep-20 05:30 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://e.gyazo.com/3af7803ef07f1eb9cdb19d904ed8a4ca">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/3af7803ef07f1eb9cdb19d904ed8a4ca-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/3af7803ef07f1eb9cdb19d904ed8a4ca-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="750316962671755286" id="message-750316962671755286">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://a.gyazo.com/62aeafc3a9fbfc5a5fc794d178b53aa6">https://a.gyazo.com/62aeafc3a9fbfc5a5fc794d178b53aa6</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="01-Sep-20 05:31 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://a.gyazo.com/62aeafc3a9fbfc5a5fc794d178b53aa6">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/62aeafc3a9fbfc5a5fc794d178b53aa6-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/62aeafc3a9fbfc5a5fc794d178b53aa6-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">01-Sep-20 05:45 AM</span>
+
+            <div class="chatlog__message " data-message-id="750320441964494908" id="message-750320441964494908">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://c.gyazo.com/8d1a94893fb401a144bb19bd84b743c4">https://c.gyazo.com/8d1a94893fb401a144bb19bd84b743c4</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="01-Sep-20 05:45 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://c.gyazo.com/8d1a94893fb401a144bb19bd84b743c4">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/8d1a94893fb401a144bb19bd84b743c4-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/8d1a94893fb401a144bb19bd84b743c4-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">01-Sep-20 06:09 AM</span>
+
+            <div class="chatlog__message " data-message-id="750326341039161414" id="message-750326341039161414">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://a.gyazo.com/6e03144c2934de582553c7cc0ebd17f9">https://a.gyazo.com/6e03144c2934de582553c7cc0ebd17f9</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://a.gyazo.com/6e03144c2934de582553c7cc0ebd17f9">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/6e03144c2934de582553c7cc0ebd17f9-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/6e03144c2934de582553c7cc0ebd17f9-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">03-Sep-20 09:19 AM</span>
+
+            <div class="chatlog__message " data-message-id="751099042402140290" id="message-751099042402140290">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://q.gyazo.com/4488b5be5d9d93f6f206b1dbc34a7959">https://q.gyazo.com/4488b5be5d9d93f6f206b1dbc34a7959</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://q.gyazo.com/4488b5be5d9d93f6f206b1dbc34a7959">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/4488b5be5d9d93f6f206b1dbc34a7959-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/4488b5be5d9d93f6f206b1dbc34a7959-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="751099433122529300" id="message-751099433122529300">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://a.gyazo.com/345378614b48814d3ff571502945cb11">https://a.gyazo.com/345378614b48814d3ff571502945cb11</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://a.gyazo.com/345378614b48814d3ff571502945cb11">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/345378614b48814d3ff571502945cb11-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/345378614b48814d3ff571502945cb11-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">04-Sep-20 04:45 AM</span>
+
+            <div class="chatlog__message " data-message-id="751392388135518258" id="message-751392388135518258">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://w.gyazo.com/48c6a7d190adfca769714cb9fca31303">https://w.gyazo.com/48c6a7d190adfca769714cb9fca31303</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://w.gyazo.com/48c6a7d190adfca769714cb9fca31303">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/48c6a7d190adfca769714cb9fca31303-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/48c6a7d190adfca769714cb9fca31303-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">04-Sep-20 05:23 AM</span>
+
+            <div class="chatlog__message " data-message-id="751402014038163456" id="message-751402014038163456">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://u.gyazo.com/3346e140af9744b0639fc6d6c96c27d8">https://u.gyazo.com/3346e140af9744b0639fc6d6c96c27d8</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://u.gyazo.com/3346e140af9744b0639fc6d6c96c27d8">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/3346e140af9744b0639fc6d6c96c27d8-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/3346e140af9744b0639fc6d6c96c27d8-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">04-Sep-20 02:36 PM</span>
+
+            <div class="chatlog__message " data-message-id="751541098241065086" id="message-751541098241065086">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://a.gyazo.com/a733f520d1ebcc759c589ef0c06fa7ab">https://a.gyazo.com/a733f520d1ebcc759c589ef0c06fa7ab</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="04-Sep-20 02:36 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://a.gyazo.com/a733f520d1ebcc759c589ef0c06fa7ab">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/a733f520d1ebcc759c589ef0c06fa7ab-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/a733f520d1ebcc759c589ef0c06fa7ab-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="751541206869344296" id="message-751541206869344296">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://c.gyazo.com/8658c9141ebc5954d2455a88eeb97f7b">https://c.gyazo.com/8658c9141ebc5954d2455a88eeb97f7b</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="04-Sep-20 02:36 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://c.gyazo.com/8658c9141ebc5954d2455a88eeb97f7b">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/8658c9141ebc5954d2455a88eeb97f7b-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/8658c9141ebc5954d2455a88eeb97f7b-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">05-Sep-20 04:41 PM</span>
+
+            <div class="chatlog__message " data-message-id="751934968061624410" id="message-751934968061624410">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://e.gyazo.com/a2e2d4eee58222de3040b2d8c8c6b020">https://e.gyazo.com/a2e2d4eee58222de3040b2d8c8c6b020</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="05-Sep-20 04:41 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://e.gyazo.com/a2e2d4eee58222de3040b2d8c8c6b020">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/a2e2d4eee58222de3040b2d8c8c6b020-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/a2e2d4eee58222de3040b2d8c8c6b020-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="751936094236442675" id="message-751936094236442675">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://v.gyazo.com/ab8a194ac79d761187a8f6e78e0d828a">https://v.gyazo.com/ab8a194ac79d761187a8f6e78e0d828a</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="05-Sep-20 04:45 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://v.gyazo.com/ab8a194ac79d761187a8f6e78e0d828a">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/ab8a194ac79d761187a8f6e78e0d828a-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/ab8a194ac79d761187a8f6e78e0d828a-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">05-Sep-20 08:04 PM</span>
+
+            <div class="chatlog__message " data-message-id="751986175555797043" id="message-751986175555797043">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://x.gyazo.com/fa55ed10d7140812ae8d5de50dc32689">https://x.gyazo.com/fa55ed10d7140812ae8d5de50dc32689</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="05-Sep-20 08:04 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://x.gyazo.com/fa55ed10d7140812ae8d5de50dc32689">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/fa55ed10d7140812ae8d5de50dc32689-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/fa55ed10d7140812ae8d5de50dc32689-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">05-Sep-20 08:12 PM</span>
+
+            <div class="chatlog__message " data-message-id="751988230638927883" id="message-751988230638927883">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://o.gyazo.com/ed2891c548daba21157b8eb693693e71">https://o.gyazo.com/ed2891c548daba21157b8eb693693e71</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="05-Sep-20 08:13 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://o.gyazo.com/ed2891c548daba21157b8eb693693e71">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/ed2891c548daba21157b8eb693693e71-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/ed2891c548daba21157b8eb693693e71-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">05-Sep-20 08:30 PM</span>
+
+            <div class="chatlog__message " data-message-id="751992592366829670" id="message-751992592366829670">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://z.gyazo.com/c24bcf8a5514068e84416efea0de7a3b">https://z.gyazo.com/c24bcf8a5514068e84416efea0de7a3b</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="05-Sep-20 08:30 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://z.gyazo.com/c24bcf8a5514068e84416efea0de7a3b">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/c24bcf8a5514068e84416efea0de7a3b-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/c24bcf8a5514068e84416efea0de7a3b-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">07-Sep-20 12:54 AM</span>
+
+            <div class="chatlog__message " data-message-id="752421511075332157" id="message-752421511075332157">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://e.gyazo.com/29b985f5db4e819caff8ea1945ee7e07">https://e.gyazo.com/29b985f5db4e819caff8ea1945ee7e07</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://e.gyazo.com/29b985f5db4e819caff8ea1945ee7e07">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/29b985f5db4e819caff8ea1945ee7e07-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/29b985f5db4e819caff8ea1945ee7e07-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">07-Sep-20 10:13 AM</span>
+
+            <div class="chatlog__message " data-message-id="752562295317463051" id="message-752562295317463051">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://t.gyazo.com/0e84d9b423f883e4c7b9fc9b3f0759d8">https://t.gyazo.com/0e84d9b423f883e4c7b9fc9b3f0759d8</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="07-Sep-20 10:14 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://t.gyazo.com/0e84d9b423f883e4c7b9fc9b3f0759d8">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/0e84d9b423f883e4c7b9fc9b3f0759d8-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/0e84d9b423f883e4c7b9fc9b3f0759d8-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div class="chatlog__reactions">
+                            <div class="chatlog__reaction">
+                                <img class="emoji emoji--small" alt="&#128563;" title="&#128563;" src="https://twemoji.maxcdn.com/2/72x72/1f633.png">
+                                <span class="chatlog__reaction-count">1</span>
+                            </div>
+                    </div>
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">07-Sep-20 03:59 PM</span>
+
+            <div class="chatlog__message " data-message-id="752649223467565066" id="message-752649223467565066">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://n.gyazo.com/09578d5bb802532580176ae528a3c5f6">https://n.gyazo.com/09578d5bb802532580176ae528a3c5f6</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="07-Sep-20 04:01 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://n.gyazo.com/09578d5bb802532580176ae528a3c5f6">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/09578d5bb802532580176ae528a3c5f6-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/09578d5bb802532580176ae528a3c5f6-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">07-Sep-20 04:32 PM</span>
+
+            <div class="chatlog__message " data-message-id="752657539329687605" id="message-752657539329687605">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://y.gyazo.com/2c110e5de8c80b113eedc885e6c8289c">https://y.gyazo.com/2c110e5de8c80b113eedc885e6c8289c</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://y.gyazo.com/2c110e5de8c80b113eedc885e6c8289c">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/2c110e5de8c80b113eedc885e6c8289c-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/2c110e5de8c80b113eedc885e6c8289c-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">12-Sep-20 09:37 AM</span>
+
+            <div class="chatlog__message " data-message-id="754365009739382794" id="message-754365009739382794">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://e.gyazo.com/0d556b99899dee3d7150853bf512216e">https://e.gyazo.com/0d556b99899dee3d7150853bf512216e</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="12-Sep-20 09:39 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://e.gyazo.com/0d556b99899dee3d7150853bf512216e">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/0d556b99899dee3d7150853bf512216e-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/0d556b99899dee3d7150853bf512216e-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="754365406914805787" id="message-754365406914805787">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://y.gyazo.com/3bc3aa07efc1f186c975da038f73a266">https://y.gyazo.com/3bc3aa07efc1f186c975da038f73a266</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="12-Sep-20 09:39 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://y.gyazo.com/3bc3aa07efc1f186c975da038f73a266">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/3bc3aa07efc1f186c975da038f73a266-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/3bc3aa07efc1f186c975da038f73a266-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">12-Sep-20 12:37 PM</span>
+
+            <div class="chatlog__message " data-message-id="754410402837692426" id="message-754410402837692426">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://v.gyazo.com/ded2d48f14f74bd861ddd3d5ecc1f060">https://v.gyazo.com/ded2d48f14f74bd861ddd3d5ecc1f060</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="12-Sep-20 12:38 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://v.gyazo.com/ded2d48f14f74bd861ddd3d5ecc1f060">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/ded2d48f14f74bd861ddd3d5ecc1f060-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/ded2d48f14f74bd861ddd3d5ecc1f060-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">21-Sep-20 03:41 PM</span>
+
+            <div class="chatlog__message " data-message-id="757718238720163912" id="message-757718238720163912">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://q.gyazo.com/38c78772710bb0b0bbb6430e53eed376">https://q.gyazo.com/38c78772710bb0b0bbb6430e53eed376</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://q.gyazo.com/38c78772710bb0b0bbb6430e53eed376">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/38c78772710bb0b0bbb6430e53eed376-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/38c78772710bb0b0bbb6430e53eed376-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">23-Sep-20 02:43 PM</span>
+
+            <div class="chatlog__message " data-message-id="758428283578351626" id="message-758428283578351626">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://n.gyazo.com/5bceed4290ce061ac1edf8b7db3e0c40">https://n.gyazo.com/5bceed4290ce061ac1edf8b7db3e0c40</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="23-Sep-20 02:44 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://n.gyazo.com/5bceed4290ce061ac1edf8b7db3e0c40">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/5bceed4290ce061ac1edf8b7db3e0c40-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/5bceed4290ce061ac1edf8b7db3e0c40-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">25-Sep-20 06:30 AM</span>
+
+            <div class="chatlog__message " data-message-id="759028995861381141" id="message-759028995861381141">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://p.gyazo.com/af136e8af6fbc141fcf35a0bef4d97b8">https://p.gyazo.com/af136e8af6fbc141fcf35a0bef4d97b8</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://p.gyazo.com/af136e8af6fbc141fcf35a0bef4d97b8">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/af136e8af6fbc141fcf35a0bef4d97b8-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/af136e8af6fbc141fcf35a0bef4d97b8-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="759029050819215391" id="message-759029050819215391">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://o.gyazo.com/30c90ca5a21c6b1bbd26c5203b0f1725">https://o.gyazo.com/30c90ca5a21c6b1bbd26c5203b0f1725</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://o.gyazo.com/30c90ca5a21c6b1bbd26c5203b0f1725">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/30c90ca5a21c6b1bbd26c5203b0f1725-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/30c90ca5a21c6b1bbd26c5203b0f1725-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">30-Sep-20 07:42 AM</span>
+
+            <div class="chatlog__message " data-message-id="760858995182665738" id="message-760858995182665738">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://o.gyazo.com/1ff2303f22543af10556064e86994b57">https://o.gyazo.com/1ff2303f22543af10556064e86994b57</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://o.gyazo.com/1ff2303f22543af10556064e86994b57">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/1ff2303f22543af10556064e86994b57-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/1ff2303f22543af10556064e86994b57-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">02-Oct-20 10:36 AM</span>
+
+            <div class="chatlog__message " data-message-id="761627650262958122" id="message-761627650262958122">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://x.gyazo.com/9e004bebdf9957b748acc9b91f518b22">https://x.gyazo.com/9e004bebdf9957b748acc9b91f518b22</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://x.gyazo.com/9e004bebdf9957b748acc9b91f518b22">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/9e004bebdf9957b748acc9b91f518b22-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/9e004bebdf9957b748acc9b91f518b22-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">05-Oct-20 04:47 PM</span>
+
+            <div class="chatlog__message " data-message-id="762808160753942548" id="message-762808160753942548">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://q.gyazo.com/fca6d4312780b5ffc32db531cbe2611d">https://q.gyazo.com/fca6d4312780b5ffc32db531cbe2611d</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="05-Oct-20 04:48 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://q.gyazo.com/fca6d4312780b5ffc32db531cbe2611d">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/fca6d4312780b5ffc32db531cbe2611d-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/fca6d4312780b5ffc32db531cbe2611d-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">05-Oct-20 05:07 PM</span>
+
+            <div class="chatlog__message " data-message-id="762813264039247923" id="message-762813264039247923">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://y.gyazo.com/4f86994ed1d18ecb488d94a07e0326b4">https://y.gyazo.com/4f86994ed1d18ecb488d94a07e0326b4</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="05-Oct-20 05:07 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://y.gyazo.com/4f86994ed1d18ecb488d94a07e0326b4">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/4f86994ed1d18ecb488d94a07e0326b4-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/4f86994ed1d18ecb488d94a07e0326b4-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">07-Oct-20 07:14 AM</span>
+
+            <div class="chatlog__message " data-message-id="763388731818115082" id="message-763388731818115082">
+
+                    <div class="chatlog__attachment">
+                        <div class="" onclick="">
+                            <div class="">
+                                    <div class="chatlog__attachment-container">
+                                        <svg class="chatlog__attachment-icon" viewBox="0 0 720 960">
+                                            <path class="a"/>
+                                            <path class="b"/>
+                                            <path class="c"/>
+                                            <path class="d"/>
+                                        </svg>
+                                        <div class="chatlog__attachment-filename">
+                                            <a href="https://cdn.discordapp.com/attachments/741732506927235083/763388731519795210/hvcvani3_vs_spyderfootlox-0_0.rpl">
+                                                hvcvani3_vs_spyderfootlox-0_0.rpl
+                                            </a>
+                                        </div>
+                                        <div class="chatlog__attachment-filesize">
+                                            557.7 KB
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">07-Oct-20 07:56 PM</span>
+
+            <div class="chatlog__message " data-message-id="763580483359080459" id="message-763580483359080459">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://b.gyazo.com/a286a39805c947a68ea22d45ee18f8df">https://b.gyazo.com/a286a39805c947a68ea22d45ee18f8df</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="07-Oct-20 07:56 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://b.gyazo.com/a286a39805c947a68ea22d45ee18f8df">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/a286a39805c947a68ea22d45ee18f8df-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/a286a39805c947a68ea22d45ee18f8df-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">10-Oct-20 08:18 AM</span>
+
+            <div class="chatlog__message " data-message-id="764491960131387453" id="message-764491960131387453">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://u.gyazo.com/b4a260a3456af02d0358d24c346ee8de">https://u.gyazo.com/b4a260a3456af02d0358d24c346ee8de</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 08:18 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://u.gyazo.com/b4a260a3456af02d0358d24c346ee8de">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/b4a260a3456af02d0358d24c346ee8de-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/b4a260a3456af02d0358d24c346ee8de-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="764492029538861086" id="message-764492029538861086">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://u.gyazo.com/6220836f9bf2852d81d03d1141f83e92">https://u.gyazo.com/6220836f9bf2852d81d03d1141f83e92</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 08:18 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://u.gyazo.com/6220836f9bf2852d81d03d1141f83e92">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/6220836f9bf2852d81d03d1141f83e92-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/6220836f9bf2852d81d03d1141f83e92-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="764492456104165467" id="message-764492456104165467">
+
+                    <div class="chatlog__attachment">
+                        <div class="" onclick="">
+                            <div class="">
+                                    <div class="chatlog__attachment-container">
+                                        <svg class="chatlog__attachment-icon" viewBox="0 0 720 960">
+                                            <path class="a"/>
+                                            <path class="b"/>
+                                            <path class="c"/>
+                                            <path class="d"/>
+                                        </svg>
+                                        <div class="chatlog__attachment-filename">
+                                            <a href="https://cdn.discordapp.com/attachments/741732506927235083/764492455654719508/footlox_purple.rpl">
+                                                footlox_purple.rpl
+                                            </a>
+                                        </div>
+                                        <div class="chatlog__attachment-filesize">
+                                            415.3 KB
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">10-Oct-20 11:59 AM</span>
+
+            <div class="chatlog__message " data-message-id="764547572562919454" id="message-764547572562919454">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://y.gyazo.com/f523caea15302217b8e6c506db9a8871">https://y.gyazo.com/f523caea15302217b8e6c506db9a8871</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 11:59 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://y.gyazo.com/f523caea15302217b8e6c506db9a8871">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/f523caea15302217b8e6c506db9a8871-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/f523caea15302217b8e6c506db9a8871-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="764547632013508649" id="message-764547632013508649">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://r.gyazo.com/3a1b2c4d4fcb21cba2dd50074c484a06">https://r.gyazo.com/3a1b2c4d4fcb21cba2dd50074c484a06</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 12:00 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://r.gyazo.com/3a1b2c4d4fcb21cba2dd50074c484a06">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/3a1b2c4d4fcb21cba2dd50074c484a06-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/3a1b2c4d4fcb21cba2dd50074c484a06-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="764547659637456936" id="message-764547659637456936">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://q.gyazo.com/2dba03f5f4fefd27f0f853441f6c5baa">https://q.gyazo.com/2dba03f5f4fefd27f0f853441f6c5baa</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 12:06 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://q.gyazo.com/2dba03f5f4fefd27f0f853441f6c5baa">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/2dba03f5f4fefd27f0f853441f6c5baa-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/2dba03f5f4fefd27f0f853441f6c5baa-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="764547724304449566" id="message-764547724304449566">
+
+                    <div class="chatlog__attachment">
+                        <div class="" onclick="">
+                            <div class="">
+                                    <div class="chatlog__attachment-container">
+                                        <svg class="chatlog__attachment-icon" viewBox="0 0 720 960">
+                                            <path class="a"/>
+                                            <path class="b"/>
+                                            <path class="c"/>
+                                            <path class="d"/>
+                                        </svg>
+                                        <div class="chatlog__attachment-filename">
+                                            <a href="https://cdn.discordapp.com/attachments/741732506927235083/764547722430382090/grapple_w_lokki.rpl">
+                                                grapple_w_lokki.rpl
+                                            </a>
+                                        </div>
+                                        <div class="chatlog__attachment-filesize">
+                                            795.71 KB
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">10-Oct-20 12:13 PM</span>
+
+            <div class="chatlog__message " data-message-id="764551273914826772" id="message-764551273914826772">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://o.gyazo.com/f26522c717d683de894619d8c0c0f289">https://o.gyazo.com/f26522c717d683de894619d8c0c0f289</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 12:13 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://o.gyazo.com/f26522c717d683de894619d8c0c0f289">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/f26522c717d683de894619d8c0c0f289-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/f26522c717d683de894619d8c0c0f289-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="764552762351812649" id="message-764552762351812649">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://o.gyazo.com/1c56e677622dcd347dc2e1e5c8392949">https://o.gyazo.com/1c56e677622dcd347dc2e1e5c8392949</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Oct-20 12:19 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://o.gyazo.com/1c56e677622dcd347dc2e1e5c8392949">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/1c56e677622dcd347dc2e1e5c8392949-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/1c56e677622dcd347dc2e1e5c8392949-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">16-Oct-20 05:58 AM</span>
+
+            <div class="chatlog__message " data-message-id="766631125304344587" id="message-766631125304344587">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://u.gyazo.com/2f2c07922d6253dd2f42838609cf650a">https://u.gyazo.com/2f2c07922d6253dd2f42838609cf650a</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="16-Oct-20 05:58 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://u.gyazo.com/2f2c07922d6253dd2f42838609cf650a">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/2f2c07922d6253dd2f42838609cf650a-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/2f2c07922d6253dd2f42838609cf650a-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">24-Oct-20 08:14 PM</span>
+
+            <div class="chatlog__message " data-message-id="769745771293179934" id="message-769745771293179934">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://y.gyazo.com/a6a42119380f60e5fa908981be39e3ca">https://y.gyazo.com/a6a42119380f60e5fa908981be39e3ca</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="24-Oct-20 08:15 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://y.gyazo.com/a6a42119380f60e5fa908981be39e3ca">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/a6a42119380f60e5fa908981be39e3ca-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/a6a42119380f60e5fa908981be39e3ca-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">10-Nov-20 11:18 AM</span>
+
+            <div class="chatlog__message " data-message-id="775786555876179999" id="message-775786555876179999">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://o.gyazo.com/5b49b53ee2adfb181b424513198b6fc8">https://o.gyazo.com/5b49b53ee2adfb181b424513198b6fc8</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="10-Nov-20 11:18 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://o.gyazo.com/5b49b53ee2adfb181b424513198b6fc8">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/5b49b53ee2adfb181b424513198b6fc8-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/5b49b53ee2adfb181b424513198b6fc8-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">11-Nov-20 10:11 AM</span>
+
+            <div class="chatlog__message " data-message-id="776132069553864763" id="message-776132069553864763">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://u.gyazo.com/000c44cb1827dc32cc1418d1980bc8cd">https://u.gyazo.com/000c44cb1827dc32cc1418d1980bc8cd</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="11-Nov-20 10:11 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://u.gyazo.com/000c44cb1827dc32cc1418d1980bc8cd">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/000c44cb1827dc32cc1418d1980bc8cd-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/000c44cb1827dc32cc1418d1980bc8cd-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">16-Nov-20 02:47 PM</span>
+
+            <div class="chatlog__message " data-message-id="778013410629124166" id="message-778013410629124166">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://p.gyazo.com/b68eaf50c8be4a8c79d9150bbd5f5ef4">https://p.gyazo.com/b68eaf50c8be4a8c79d9150bbd5f5ef4</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="16-Nov-20 03:04 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://p.gyazo.com/b68eaf50c8be4a8c79d9150bbd5f5ef4">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/b68eaf50c8be4a8c79d9150bbd5f5ef4-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/b68eaf50c8be4a8c79d9150bbd5f5ef4-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+            <div class="chatlog__message " data-message-id="778013450918953010" id="message-778013450918953010">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://p.gyazo.com/800cd5b59d93cf74d21b32a76d4d1eba">https://p.gyazo.com/800cd5b59d93cf74d21b32a76d4d1eba</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="16-Nov-20 03:04 PM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://p.gyazo.com/800cd5b59d93cf74d21b32a76d4d1eba">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/800cd5b59d93cf74d21b32a76d4d1eba-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/800cd5b59d93cf74d21b32a76d4d1eba-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">20-Nov-20 06:42 PM</span>
+
+            <div class="chatlog__message " data-message-id="779522065509515304" id="message-779522065509515304">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://o.gyazo.com/15f70bfbf91e27c20246e751a4c7c1a7">https://o.gyazo.com/15f70bfbf91e27c20246e751a4c7c1a7</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="21-Nov-20 09:19 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://o.gyazo.com/15f70bfbf91e27c20246e751a4c7c1a7">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/15f70bfbf91e27c20246e751a4c7c1a7-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/15f70bfbf91e27c20246e751a4c7c1a7-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">21-Feb-21 11:50 AM</span>
+
+            <div class="chatlog__message " data-message-id="813120417870118912" id="message-813120417870118912">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://e.gyazo.com/2f8ae432be6e33bbbc3bed6b0ec318e1">https://e.gyazo.com/2f8ae432be6e33bbbc3bed6b0ec318e1</a></span>
+
+                                <span class="chatlog__edited-timestamp" title="21-Feb-21 11:50 AM">(edited)</span>
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+                                        <div class="chatlog__embed-title">
+                                                <a class="chatlog__embed-title-link" href="https://e.gyazo.com/2f8ae432be6e33bbbc3bed6b0ec318e1">
+                                                    <div class="markdown preserve-whitespace">Gyazo</div>
+                                                </a>
+                                        </div>
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.gyazo.com/thumb/1200/2f8ae432be6e33bbbc3bed6b0ec318e1-gif.gif">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.gyazo.com/thumb/1200/2f8ae432be6e33bbbc3bed6b0ec318e1-gif.gif" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">11-Apr-21 02:01 PM</span>
+
+            <div class="chatlog__message " data-message-id="830895402345431040" id="message-830895402345431040">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://imgur.com/aRlbiy9">https://imgur.com/aRlbiy9</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.imgur.com/aRlbiy9h.jpg">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.imgur.com/aRlbiy9h.jpg" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+
+<div class="chatlog__message-group">
+    <div class="chatlog__author-avatar-container">
+        <img class="chatlog__author-avatar" src="https://cdn.discordapp.com/avatars/591098671056289793/16b4c992b1c4182dcb3e620d1d2424bd.png" alt="Avatar">
+    </div>
+    <div class="chatlog__messages">
+        <span class="chatlog__author-name" title="footlox#6058" data-user-id="591098671056289793" style="color: rgb(143,0,197)">footlox</span>
+
+
+        <span class="chatlog__timestamp">16-Apr-21 10:24 PM</span>
+
+            <div class="chatlog__message " data-message-id="832833982013374516" id="message-832833982013374516">
+                    <div class="chatlog__content">
+                        <div class="markdown">
+                            <span class="preserve-whitespace"><a href="https://imgur.com/CzWqMqC">https://imgur.com/CzWqMqC</a></span>
+
+                        </div>
+                    </div>
+
+
+                    <div class="chatlog__embed">
+                            <div class="chatlog__embed-color-pill chatlog__embed-color-pill--default"></div>
+
+                        <div class="chatlog__embed-content-container">
+                            <div class="chatlog__embed-content">
+                                <div class="chatlog__embed-text">
+
+
+
+                                </div>
+
+                                    <div class="chatlog__embed-thumbnail-container">
+                                        <a class="chatlog__embed-thumbnail-link" href="https://i.imgur.com/CzWqMqCh.jpg">
+                                            <img class="chatlog__embed-thumbnail" src="https://i.imgur.com/CzWqMqCh.jpg" alt="Thumbnail">
+                                        </a>
+                                    </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+            </div>
+    </div>
+</div>
+
+</div>
+
+<div class="postamble">
+    <div class="postamble__entry">Exported 75 message(s)</div>
+</div>
+
+</body>
+
+</html>
